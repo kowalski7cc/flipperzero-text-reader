@@ -27,10 +27,13 @@ int32_t text_reader_app(void *p)
         if (!res)
         {
             FURI_LOG_E(TAG, "No file selected");
-            break;
+            string_clear(file_path);
+            free(text_app);
+            return 1;
         }
     }
 
     string_clear(file_path);
     free(text_app);
+    return 0;
 }

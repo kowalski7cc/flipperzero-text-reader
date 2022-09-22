@@ -1,0 +1,14 @@
+App(
+    appid="text_reader",
+    name="Text Reader",
+    apptype=FlipperAppType.EXTERNAL,
+    entry_point="text_reader_app",
+    cdefines=["TEXT_READER"],
+    requires=[
+        "gui",
+        "dialogs",
+    ],
+    fap_icon="file.png",
+    stack_size=8 * 1024,
+    order=20,
+)

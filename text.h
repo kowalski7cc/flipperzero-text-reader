@@ -5,14 +5,17 @@
 #include <gui/gui.h>
 #include <gui/view_dispatcher.h>
 #include <input/input.h>
+#include <toolbox/path.h>
 
 #define TAG "Text Reader"
 
-typedef struct {
-    Gui* gui;
-    ViewPort* view_port;
-    FuriMessageQueue* input_queue;
-    FuriMutex* mutex;
-    string_t* fine_name;
-    string_t* file_content;
+typedef struct
+{
+    Gui *gui;
+    ViewPort *view_port;
+    FuriMessageQueue *input_queue;
+    FuriMutex *mutex;
+    string_t file_name;
+    string_t file_content;
+    uint8_t cursor;
 } TextApp;

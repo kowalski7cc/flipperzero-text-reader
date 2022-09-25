@@ -8,8 +8,11 @@
 
 #define TAG "Text Reader"
 
-typedef struct
-{
-    Gui *gui;
-    ViewDispatcher *view_dispatcher;
+typedef struct {
+    Gui* gui;
+    ViewPort* view_port;
+    FuriMessageQueue* input_queue;
+    FuriMutex* mutex;
+    string_t* fine_name;
+    string_t* file_content;
 } TextApp;

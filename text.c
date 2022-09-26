@@ -182,7 +182,7 @@ int32_t text_reader_app(void *p)
             }
             else if (input.key == InputKeyDown)
             {
-                if (text_app->cursor + COLS * ROWS > text_app->chars_size)
+                if (input.type == InputTypeLong || text_app->cursor + COLS * ROWS > text_app->chars_size)
                 {
                     text_app->cursor = text_app->chars_size - COLS * ROWS;
                 }

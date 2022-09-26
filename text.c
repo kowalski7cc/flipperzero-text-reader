@@ -5,9 +5,6 @@
 static void render_callback(Canvas *canvas, void *ctx)
 {
     TextApp *text_app = ctx;
-
-    // malloc(sizeof(char) * (ROW_SIZE + 5));
-
     canvas_clear(canvas);
     canvas_set_color(canvas, ColorBlack);
     canvas_set_font(canvas, FontPrimary);
@@ -23,10 +20,8 @@ static void render_callback(Canvas *canvas, void *ctx)
     {
         for (uint8_t j = 0; j < COLS; j++)
         {
-            data_offset++;
-            if (data[text_app->cursor + data_offset++] == '\n')
+            if (data[text_app->cursor + data_offset] == '\n')
             {
-                i++;
                 data_offset++;
                 break;
             }
@@ -34,15 +29,12 @@ static void render_callback(Canvas *canvas, void *ctx)
             {
                 screen_buffer[i][j] = data[text_app->cursor + data_offset];
                 data_offset++;
-                FURI_LOG_T(TAG, "Cursor: %d, Offset: %d", text_app->cursor, data_offset);
-                FURI_LOG_T(TAG, "I: %d, J: %d", i, j);
-                FURI_LOG_T(TAG, "Data: %c, Buffer: %c", screen_buffer[i][j]);
             }
         }
-        for (uint8_t i = 0; i < ROWS; i++)
-        {
-            canvas_draw_str(canvas, 0, 20 + 5 * i, screen_buffer[i]);
-        }
+    }
+    for (uint8_t i = 0; i < ROWS; i++)
+    {
+        canvas_draw_str(canvas, 0, 20 + 10 * i, screen_buffer[i]);
     }
 }
 
@@ -82,7 +74,7 @@ bool load_file(const char *file_path, TextApp *text_app)
             for (size_t i = 0; i < ret; i++)
             {
                 string_push_back(text_app->file_content, buffer[i]);
-                text_app->line_nb++;
+                text_app->chars_size += ret;
             }
             FURI_LOG_T(TAG, "%s", buffer);
 
@@ -179,11 +171,25 @@ int32_t text_reader_app(void *p)
             }
             else if (input.key == InputKeyUp)
             {
-                // Scroll up
+                if (input.type == InputTypeLong || text_app->cursor - COLS < 0)
+                {
+                    text_app->cursor = 0;
+                }
+                else
+                {
+                    text_app->cursor -= COLS;
+                }
             }
             else if (input.key == InputKeyDown)
             {
-                // Scroll down
+                if (text_app->cursor + COLS * ROWS > text_app->chars_size)
+                {
+                    text_app->cursor = text_app->chars_size - COLS * ROWS;
+                }
+                else
+                {
+                    text_app->cursor += COLS;
+                }
             }
 
             furi_mutex_release(text_app->mutex);

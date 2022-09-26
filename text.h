@@ -8,6 +8,8 @@
 #include <toolbox/path.h>
 
 #define TAG "Text Reader"
+#define ROWS 4
+#define COLS 30
 
 typedef struct
 {
@@ -17,5 +19,6 @@ typedef struct
     FuriMutex *mutex;
     string_t file_name;
     string_t file_content;
-    uint8_t cursor;
+    uint16_t line_nb;
+    uint16_t cursor;
 } TextApp;
